@@ -1,0 +1,62 @@
+<%- include('../partials/header', { title: 'New Booking' }) %>
+
+<h2 class="mb-3">New Safari Booking</h2>
+
+<form action="/bookings" method="POST" class="card card-body shadow-sm">
+  <h5>Customer details</h5>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Full name</label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Phone</label>
+      <input type="text" name="phone" class="form-control">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Country</label>
+      <input type="text" name="country" class="form-control">
+    </div>
+  </div>
+
+  <h5 class="mt-2">Safari details</h5>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Safari package</label>
+      <select name="package_id" class="form-select" required>
+        <option value="">-- Select package --</option>
+        <% packages.forEach(function(p) { %>
+          <option value="<%= p.package_id %>"><%= p.name %> (Rs. <%= p.price %> per person)</option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Guide (optional)</label>
+      <select name="guide_id" class="form-select">
+        <option value="">-- Any guide --</option>
+        <% guides.forEach(function(g) { %>
+          <option value="<%= g.guide_id %>"><%= g.name %> (<%= g.languages %>)</option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Safari date</label>
+      <input type="date" name="safari_date" class="form-control" required>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Number of people</label>
+      <input type="number" name="num_people" class="form-control" min="1" max="6" required>
+    </div>
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-success">Save Booking</button>
+    <a href="/bookings" class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>
