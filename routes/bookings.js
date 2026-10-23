@@ -24,7 +24,8 @@ router.post('/', async (req, res) => {
     // Get the package to calculate the price
     const [pk] = await db.query('SELECT * FROM safari_packages WHERE package_id = ?', [package_id]);
     if (pk.length === 0) return res.status(400).send('Invalid package');
-    const total_price = pk[0].price * num_people;
+    const jeeps = Math.ceil(num_people / pk[0].max_capacity);
+    const total_price = pk[0].price_per_jeep * jeeps;
 
     // Find the customer by email, or create a new one
     let customer_id;
