@@ -10,15 +10,20 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Temporary test route to confirm the database works
+// Home page: shows all safari packages
 app.get('/', async (req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM safari_packages');
-    res.json(rows);
+    const [packages] = await db.query(
+      `SELECT sp.*, p.name AS park_name
+       FROM safari_packages sp
+       JOIN parks p ON sp.park_id = p.park_id`
+    );
+    res.render('index', { packages });
   } catch (err) {
     res.status(500).send('Database error: ' + err.message);
   }
 });
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: 'Home' }) %>
+
+<div class="p-5 mb-4 bg-light rounded-3 text-center">
+  <h1 class="display-5 fw-bold">Book Your Wildlife Safari</h1>
+  <p class="lead">Explore Sri Lanka's national parks with our guided jeep safaris.</p>
+  <a href="/bookings/new" class="btn btn-success btn-lg">Make a Booking</a>
+  <a href="/bookings" class="btn btn-outline-success btn-lg">View Bookings</a>
+</div>
+
+<h3 class="mb-3">Our Safari Packages</h3>
+<div class="row">
+  <% packages.forEach(function(p) { %>
+    <div class="col-md-4 mb-3">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title"><%= p.name %></h5>
+          <p class="card-text mb-1"><strong>Park:</strong> <%= p.park_name %></p>
+          <p class="card-text mb-1"><strong>Duration:</strong> <%= p.duration_hours %> hours</p>
+          <p class="card-text mb-1"><strong>Max group:</strong> <%= p.max_capacity %> people</p>
+          <p class="card-text fw-bold text-success">Rs. <%= p.price %></p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+</div>
+
+<%- include('partials/footer') %>
