@@ -1,0 +1,75 @@
+<%- include('../partials/header', { title: 'Edit Booking' }) %>
+
+<h2 class="mb-3">Edit Booking #<%= booking.booking_id %></h2>
+
+<form action="/bookings/<%= booking.booking_id %>?_method=PUT" method="POST" class="card card-body shadow-sm">
+  <h5>Customer details</h5>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Full name</label>
+      <input type="text" name="name" class="form-control" value="<%= booking.customer_name %>" required>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Email (cannot be changed)</label>
+      <input type="email" class="form-control" value="<%= booking.email %>" disabled>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Phone</label>
+      <input type="text" name="phone" class="form-control" value="<%= booking.phone || '' %>">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Country</label>
+      <input type="text" name="country" class="form-control" value="<%= booking.country || '' %>">
+    </div>
+  </div>
+
+  <h5 class="mt-2">Safari details</h5>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Safari package</label>
+      <select name="package_id" class="form-select" required>
+        <% packages.forEach(function(p) { %>
+          <option value="<%= p.package_id %>" <%= p.package_id === booking.package_id ? 'selected' : '' %>>
+            <%= p.name %> (Rs. <%= p.price_per_jeep %> per jeep, max <%= p.max_capacity %> people)
+          </option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Guide</label>
+      <select name="guide_id" class="form-select">
+        <option value="">-- Any guide --</option>
+        <% guides.forEach(function(g) { %>
+          <option value="<%= g.guide_id %>" <%= g.guide_id === booking.guide_id ? 'selected' : '' %>>
+            <%= g.name %> (<%= g.languages %>)
+          </option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Safari date</label>
+      <input type="date" name="safari_date" class="form-control"
+             value="<%= new Date(booking.safari_date).toLocaleDateString('en-CA') %>" required>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Number of people</label>
+      <input type="number" name="num_people" class="form-control" min="1" max="30"
+             value="<%= booking.num_people %>" required>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label class="form-label">Status</label>
+      <select name="status" class="form-select">
+        <% ['Pending','Confirmed','Cancelled'].forEach(function(s) { %>
+          <option value="<%= s %>" <%= booking.status === s ? 'selected' : '' %>><%= s %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-success">Update Booking</button>
+    <a href="/bookings/<%= booking.booking_id %>" class="btn btn-outline-secondary">Cancel</a>
+  </div>
+</form>
+
+<%- include('../partials/footer') %>

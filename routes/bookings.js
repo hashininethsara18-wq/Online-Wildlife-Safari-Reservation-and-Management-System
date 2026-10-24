@@ -112,4 +112,57 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Show the edit form
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT b.*, c.name AS customer_name, c.email, c.phone, c.country
+       FROM bookings b
+       JOIN customers c ON b.customer_id = c.customer_id
+       WHERE b.booking_id = ?`,
+      [req.params.id]
+    );
+    if (rows.length === 0) return res.status(404).send('Booking not found');
+
+    const [packages] = await db.query(
+      `SELECT sp.*, p.name AS park_name
+       FROM safari_packages sp
+       JOIN parks p ON sp.park_id = p.park_id`
+    );
+    const [guides] = await db.query('SELECT * FROM guides');
+    res.render('bookings/edit', { booking: rows[0], packages, guides });
+  } catch (err) {
+    res.status(500).send('Database error: ' + err.message);
+  }
+});
+
+// Save the changes
+router.put('/:id', async (req, res) => {
+  const { name, phone, country, package_id, guide_id, safari_date, num_people, status } = req.body;
+  try {
+    const [pk] = await db.query('SELECT * FROM safari_packages WHERE package_id = ?', [package_id]);
+    if (pk.length === 0) return res.status(400).send('Invalid package');
+
+    const jeeps = Math.ceil(num_people / pk[0].max_capacity);
+    const total_price = pk[0].price_per_jeep * jeeps;
+
+    const [b] = await db.query('SELECT customer_id FROM bookings WHERE booking_id = ?', [req.params.id]);
+    if (b.length === 0) return res.status(404).send('Booking not found');
+
+    await db.query(
+      'UPDATE customers SET name = ?, phone = ?, country = ? WHERE customer_id = ?',
+      [name, phone, country, b[0].customer_id]
+    );
+    await db.query(
+      `UPDATE bookings
+       SET package_id = ?, guide_id = ?, safari_date = ?, num_people = ?, total_price = ?, status = ?
+       WHERE booking_id = ?`,
+      [package_id, guide_id || null, safari_date, num_people, total_price, status, req.params.id]
+    );
+    res.redirect('/bookings/' + req.params.id);
+  } catch (err) {
+    res.status(500).send('Database error: ' + err.message);
+  }
+});
+
 module.exports = router;
