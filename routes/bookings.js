@@ -51,10 +51,65 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Temporary list page (we build the real one in Phase 3)
+// List bookings with search, filter and sort
 router.get('/', async (req, res) => {
-  const [rows] = await db.query('SELECT * FROM bookings');
-  res.json(rows);
+  const { search = '', status = '', sort = 'date_desc' } = req.query;
+
+  // Only allow these sort choices (protects the database)
+  const sortOptions = {
+    date_desc: 'b.safari_date DESC',
+    date_asc: 'b.safari_date ASC',
+    price_desc: 'b.total_price DESC',
+    price_asc: 'b.total_price ASC'
+  };
+  const orderBy = sortOptions[sort] || sortOptions.date_desc;
+
+  let sql = `
+    SELECT b.*, c.name AS customer_name, c.email, sp.name AS package_name
+    FROM bookings b
+    JOIN customers c ON b.customer_id = c.customer_id
+    JOIN safari_packages sp ON b.package_id = sp.package_id
+    WHERE 1=1`;
+  const params = [];
+
+  if (search) {
+    sql += ' AND c.name LIKE ?';
+    params.push('%' + search + '%');
+  }
+  if (status) {
+    sql += ' AND b.status = ?';
+    params.push(status);
+  }
+  sql += ' ORDER BY ' + orderBy;
+
+  try {
+    const [bookings] = await db.query(sql, params);
+    res.render('bookings/list', { bookings, search, status, sort });
+  } catch (err) {
+    res.status(500).send('Database error: ' + err.message);
+  }
+});
+
+// View one booking in detail
+router.get('/:id', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT b.*, c.name AS customer_name, c.email, c.phone, c.country,
+              sp.name AS package_name, sp.duration_hours, p.name AS park_name,
+              g.name AS guide_name, g.phone AS guide_phone
+       FROM bookings b
+       JOIN customers c ON b.customer_id = c.customer_id
+       JOIN safari_packages sp ON b.package_id = sp.package_id
+       JOIN parks p ON sp.park_id = p.park_id
+       LEFT JOIN guides g ON b.guide_id = g.guide_id
+       WHERE b.booking_id = ?`,
+      [req.params.id]
+    );
+    if (rows.length === 0) return res.status(404).send('Booking not found');
+    res.render('bookings/details', { booking: rows[0] });
+  } catch (err) {
+    res.status(500).send('Database error: ' + err.message);
+  }
 });
 
 module.exports = router;

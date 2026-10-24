@@ -1,0 +1,35 @@
+<%- include('../partials/header', { title: 'Booking Details' }) %>
+
+<h2 class="mb-3">Booking #<%= booking.booking_id %></h2>
+
+<div class="row">
+  <div class="col-md-6 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-header bg-success text-white">Customer</div>
+      <div class="card-body">
+        <p class="mb-1"><strong>Name:</strong> <%= booking.customer_name %></p>
+        <p class="mb-1"><strong>Email:</strong> <%= booking.email %></p>
+        <p class="mb-1"><strong>Phone:</strong> <%= booking.phone || '-' %></p>
+        <p class="mb-0"><strong>Country:</strong> <%= booking.country || '-' %></p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 mb-3">
+    <div class="card shadow-sm h-100">
+      <div class="card-header bg-success text-white">Safari</div>
+      <div class="card-body">
+        <p class="mb-1"><strong>Park:</strong> <%= booking.park_name %></p>
+        <p class="mb-1"><strong>Package:</strong> <%= booking.package_name %> (<%= booking.duration_hours %> hours)</p>
+        <p class="mb-1"><strong>Date:</strong> <%= new Date(booking.safari_date).toLocaleDateString('en-CA') %></p>
+        <p class="mb-1"><strong>People:</strong> <%= booking.num_people %></p>
+        <p class="mb-1"><strong>Guide:</strong> <%= booking.guide_name || 'Not assigned' %></p>
+        <p class="mb-1"><strong>Total price:</strong> Rs. <%= booking.total_price %></p>
+        <p class="mb-0"><strong>Status:</strong> <%= booking.status %></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<a href="/bookings" class="btn btn-outline-secondary">Back to list</a>
+
+<%- include('../partials/footer') %>
