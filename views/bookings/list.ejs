@@ -64,6 +64,10 @@
           <td>
             <a href="/bookings/<%= b.booking_id %>" class="btn btn-sm btn-outline-primary">View</a>
             <a href="/bookings/<%= b.booking_id %>/edit" class="btn btn-sm btn-outline-warning">Edit</a>
+            <form action="/bookings/<%= b.booking_id %>?_method=DELETE" method="POST" class="d-inline"
+            onsubmit="return confirm('Are you sure you want to delete booking #<%= b.booking_id %>? This cannot be undone.');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
           </td>
         </tr>
       <% }); %>

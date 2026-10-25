@@ -32,5 +32,9 @@
 
 <a href="/bookings/<%= booking.booking_id %>/edit" class="btn btn-warning">Edit</a>
 <a href="/bookings" class="btn btn-outline-secondary">Back to list</a>
+<form action="/bookings/<%= booking.booking_id %>?_method=DELETE" method="POST" class="d-inline"
+      onsubmit="return confirm('Are you sure you want to delete this booking? This cannot be undone.');">
+  <button type="submit" class="btn btn-danger">Delete</button>
+</form>
 
 <%- include('../partials/footer') %>

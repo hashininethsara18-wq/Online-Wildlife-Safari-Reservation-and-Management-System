@@ -165,4 +165,15 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+// Delete a booking
+router.delete('/:id', async (req, res) => {
+  try {
+    const [result] = await db.query('DELETE FROM bookings WHERE booking_id = ?', [req.params.id]);
+    if (result.affectedRows === 0) return res.status(404).send('Booking not found');
+    res.redirect('/bookings');
+  } catch (err) {
+    res.status(500).send('Database error: ' + err.message);
+  }
+});
+
 module.exports = router;
