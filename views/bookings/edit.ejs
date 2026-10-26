@@ -1,8 +1,9 @@
 <%- include('../partials/header', { title: 'Edit Booking' }) %>
 
 <h2 class="mb-3">Edit Booking #<%= booking.booking_id %></h2>
+<%- include('../partials/errors', { errors: errors }) %>
 
-<form action="/bookings/<%= booking.booking_id %>?_method=PUT" method="POST" class="card card-body shadow-sm">
+<form action="/bookings/<%= booking.booking_id %>?_method=PUT" method="POST" class="card card-body shadow-sm needs-validation" novalidate></form>
   <h5>Customer details</h5>
   <div class="row">
     <div class="col-md-6 mb-3">
@@ -15,7 +16,7 @@
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Phone</label>
-      <input type="text" name="phone" class="form-control" value="<%= booking.phone || '' %>">
+      <input type="text" name="phone" class="form-control" pattern="[0-9+\- ]{7,15}" value="<%= booking.phone || '' %>">
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Country</label>

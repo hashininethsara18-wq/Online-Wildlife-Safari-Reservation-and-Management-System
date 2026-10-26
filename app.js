@@ -30,5 +30,10 @@ app.get('/', async (req, res) => {
   }
 });
 
+// 404 page: runs when no route matches
+app.use((req, res) => {
+  res.status(404).render('error', { message: 'Sorry, that page was not found.' });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));

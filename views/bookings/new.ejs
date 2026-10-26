@@ -2,24 +2,31 @@
 
 <h2 class="mb-3">New Safari Booking</h2>
 
-<form action="/bookings" method="POST" class="card card-body shadow-sm">
+<%- include('../partials/errors', { errors: errors }) %>
+
+<form action="/bookings" method="POST" class="card card-body shadow-sm needs-validation" novalidate>
   <h5>Customer details</h5>
   <div class="row">
     <div class="col-md-6 mb-3">
       <label class="form-label">Full name</label>
-      <input type="text" name="name" class="form-control" required>
+      <input type="text" name="name" class="form-control" minlength="2" maxlength="100"
+             value="<%= old.name || '' %>" required>
+      <div class="invalid-feedback">Please enter your name (at least 2 characters).</div>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Email</label>
-      <input type="email" name="email" class="form-control" required>
+      <input type="email" name="email" class="form-control" value="<%= old.email || '' %>" required>
+      <div class="invalid-feedback">Please enter a valid email address.</div>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Phone</label>
-      <input type="text" name="phone" class="form-control">
+      <input type="text" name="phone" class="form-control" pattern="[0-9+\- ]{7,15}"
+             value="<%= old.phone || '' %>">
+      <div class="invalid-feedback">Use 7 to 15 characters: numbers, +, - and spaces only.</div>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Country</label>
-      <input type="text" name="country" class="form-control">
+      <input type="text" name="country" class="form-control" value="<%= old.country || '' %>">
     </div>
   </div>
 
@@ -30,27 +37,36 @@
       <select name="package_id" class="form-select" required>
         <option value="">-- Select package --</option>
         <% packages.forEach(function(p) { %>
-          <option value="<%= p.package_id %>"><%= p.name %> (Rs. <%= p.price_per_jeep %> per jeep, max <%= p.max_capacity %> people)</option>
+          <option value="<%= p.package_id %>" <%= String(old.package_id) === String(p.package_id) ? 'selected' : '' %>>
+            <%= p.name %> (Rs. <%= p.price_per_jeep %> per jeep, max <%= p.max_capacity %> people)
+          </option>
         <% }); %>
       </select>
+      <div class="invalid-feedback">Please select a package.</div>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Guide (optional)</label>
       <select name="guide_id" class="form-select">
         <option value="">-- Any guide --</option>
         <% guides.forEach(function(g) { %>
-          <option value="<%= g.guide_id %>"><%= g.name %> (<%= g.languages %>)</option>
+          <option value="<%= g.guide_id %>" <%= String(old.guide_id) === String(g.guide_id) ? 'selected' : '' %>>
+            <%= g.name %> (<%= g.languages %>)
+          </option>
         <% }); %>
       </select>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Safari date</label>
-      <input type="date" name="safari_date" class="form-control" required>
+      <input type="date" name="safari_date" id="safari_date" data-future-only="true"
+             class="form-control" value="<%= old.safari_date || '' %>" required>
+      <div class="invalid-feedback">Please choose a date that is today or later.</div>
     </div>
     <div class="col-md-6 mb-3">
       <label class="form-label">Number of people</label>
-      <input type="number" name="num_people" class="form-control" min="1" max="30" required>
-        <div class="form-text">Each jeep carries up to 6 people. Larger groups book extra jeeps.</div>
+      <input type="number" name="num_people" class="form-control" min="1" max="30"
+             value="<%= old.num_people || '' %>" required>
+      <div class="form-text">Each jeep carries up to 6 people. Larger groups book extra jeeps.</div>
+      <div class="invalid-feedback">Enter a number from 1 to 30.</div>
     </div>
   </div>
 
