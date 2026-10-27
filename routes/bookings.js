@@ -1,3 +1,4 @@
+// routes/bookings.js - all booking routes (create, read, update, delete)
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db');

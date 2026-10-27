@@ -1,3 +1,4 @@
+// app.js - main server file for the Wildlife Safari Reservation System
 require('dotenv').config();
 const express = require('express');
 const path = require('path');
