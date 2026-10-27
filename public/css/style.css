@@ -4,7 +4,13 @@ body {
 
 /* Hero box on the home page */
 .hero {
-  background: linear-gradient(135deg, #d1e7dd, #f8f9fa);
+  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)),
+              url('/images/hero.jpg') center / cover no-repeat;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Keep buttons from wrapping badly on small screens */
