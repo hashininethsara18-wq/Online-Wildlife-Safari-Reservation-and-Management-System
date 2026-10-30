@@ -3,7 +3,7 @@
 <h2 class="mb-3">Edit Booking #<%= booking.booking_id %></h2>
 <%- include('../partials/errors', { errors: errors }) %>
 
-<form action="/bookings/<%= booking.booking_id %>?_method=PUT" method="POST" class="card card-body shadow-sm needs-validation" novalidate></form>
+<form action="/bookings/<%= booking.booking_id %>?_method=PUT" method="POST" class="card card-body shadow-sm needs-validation" novalidate>
   <h5>Customer details</h5>
   <div class="row">
     <div class="col-md-6 mb-3">
