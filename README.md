@@ -2,7 +2,7 @@
 
 EE4307 Web Application Development Mini Project
 
-**Student:** [Singaneththi H N] | **Index number:** [EG/2023/5899]
+**Name:** Singaneththi H N | **Index number:** EG/2023/5899
 
 ## Description
 
